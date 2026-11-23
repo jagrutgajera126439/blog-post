@@ -33,7 +33,7 @@ class BlogController extends Controller
         ));
     }
 
-    // Display blogs with search and filters
+    // Display all blogs with search, filters and pagination
     public function index(Request $request)
     {
         $search = $request->input('search');
@@ -54,7 +54,8 @@ class BlogController extends Controller
                 $query->where('status', $status);
             })
             ->latest()
-            ->get();
+            ->paginate(5)
+            ->withQueryString();
 
         $categories = Category::orderBy('name')->get();
 
@@ -75,7 +76,7 @@ class BlogController extends Controller
         return view('blogs.create', compact('categories'));
     }
 
-    // Save new blog and go to All Blogs
+    // Save new blog
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -101,7 +102,7 @@ class BlogController extends Controller
         return view('blogs.edit', compact('blog', 'categories'));
     }
 
-    // Update blog and go to All Blogs
+    // Update blog
     public function update(Request $request, Blog $blog)
     {
         $validated = $request->validate([
