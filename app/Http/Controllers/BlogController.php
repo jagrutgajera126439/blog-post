@@ -33,7 +33,7 @@ class BlogController extends Controller
         ));
     }
 
-    // Display All Blogs with Search, Filters and Pagination
+    // Display All Users' Blogs (Admin Only)
     public function index(Request $request)
     {
         $search = $request->input('search');
@@ -87,6 +87,9 @@ class BlogController extends Controller
             'status' => 'required|in:draft,published',
         ]);
 
+        // Admin-created blog is assigned to the admin
+        $validated['user_id'] = auth()->id();
+
         Blog::create($validated);
 
         return redirect()
@@ -102,7 +105,7 @@ class BlogController extends Controller
         return view('blogs.edit', compact('blog', 'categories'));
     }
 
-    // Update Blog
+    // Update Any Blog
     public function update(Request $request, Blog $blog)
     {
         $validated = $request->validate([
@@ -113,6 +116,7 @@ class BlogController extends Controller
             'status' => 'required|in:draft,published',
         ]);
 
+        // Keep the original blog owner unchanged
         $blog->update($validated);
 
         return redirect()
@@ -120,7 +124,7 @@ class BlogController extends Controller
             ->with('success', 'Blog post updated successfully!');
     }
 
-    // Delete Blog
+    // Delete Any Blog
     public function destroy(Blog $blog)
     {
         $blog->delete();

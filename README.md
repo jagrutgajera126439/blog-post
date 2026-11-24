@@ -30,6 +30,12 @@ BlogSphere is a web-based Blog Post Management System developed using Laravel an
 4. Search and Filter
 5. Status Management
 
+## Requirements
+
+- PHP 8.2 or newer (Laravel 12 requirement)
+- Composer
+- MySQL through XAMPP
+
 ## Installation and Setup
 
 1. Clone or download this repository.
@@ -38,8 +44,8 @@ BlogSphere is a web-based Blog Post Management System developed using Laravel an
 
    `composer install`
 
-4. Create a `.env` file using `.env.example`.
-5. Configure your database credentials in `.env`.
+4. Create a MySQL database named `blog_post` in phpMyAdmin (or MySQL).
+5. Copy `.env.example` to `.env` and set the database host, name, username, and password for your XAMPP MySQL installation.
 6. Generate the application key:
 
    `php artisan key:generate`

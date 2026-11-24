@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -62,6 +63,12 @@ class CategoryController extends Controller
     // Delete category
     public function destroy(Category $category)
     {
+        if (Blog::where('category_id', $category->id)->exists()) {
+            return redirect()
+                ->route('categories.index')
+                ->with('error', 'This category is assigned to blog posts. Reassign those posts before deleting it.');
+        }
+
         $category->delete();
 
         return redirect()

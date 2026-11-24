@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login | BlogSphere</title>
+    <title>Account Login | BlogSphere</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -139,8 +139,8 @@
 
         <p class="subtitle">Blog Management System</p>
 
-        <h2>Admin Login</h2>
-        <p class="description">Sign in to access your admin dashboard.</p>
+        <h2>Account Login</h2>
+        <p class="description">Sign in to continue to your BlogSphere dashboard.</p>
 
         @if($errors->any())
             <div class="error" style="margin-bottom: 15px;">

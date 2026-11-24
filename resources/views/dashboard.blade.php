@@ -1,8 +1,8 @@
 
 @extends('layouts.app')
 
-@section('title', 'My Dashboard')
-@section('header', 'My Dashboard')
+@section('title', 'Admin Dashboard')
+@section('header', 'Admin Dashboard')
 
 @section('content')
 
@@ -24,7 +24,7 @@
 
     .stats {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 20px;
         margin-bottom: 28px;
     }
@@ -193,7 +193,7 @@
 <!-- WELCOME -->
 <div class="welcome">
     <h1>👋 Welcome, {{ auth()->user()->name }}!</h1>
-    <p>Your personal BlogSphere dashboard. Manage your content easily.</p>
+    <p>Manage all blog posts, categories, and publication status.</p>
 </div>
 
 <!-- STATISTICS -->
@@ -202,7 +202,7 @@
     <div class="stat-card">
         <div class="stat-icon">📚</div>
         <div class="stat-number">{{ $totalBlogs }}</div>
-        <div class="stat-name">My Blogs</div>
+        <div class="stat-name">Total Blogs</div>
     </div>
 
     <div class="stat-card">
@@ -217,21 +217,23 @@
         <div class="stat-name">Drafts</div>
     </div>
 
+    <div class="stat-card">
+        <div class="stat-icon">🗂️</div>
+        <div class="stat-number">{{ $totalCategories }}</div>
+        <div class="stat-name">Categories</div>
+    </div>
+
 </div>
 
 <!-- RECENT BLOGS -->
 <section class="section">
 
     <div class="section-header">
-        <h2>🕒 My Recent Blog Posts</h2>
-        <a href="{{ route('user.blogs.index') }}" class="view-btn">
+        <h2>🕒 Recent Blog Posts</h2>
+        <a href="{{ route('blogs.index') }}" class="view-btn">
             View All →
         </a>
     </div>
-
-    @php
-        $recentBlogs = auth()->user()->blogs()->with('category')->latest()->take(5)->get();
-    @endphp
 
     @if($recentBlogs->count() > 0)
 
@@ -266,9 +268,9 @@
     @else
 
         <div class="empty">
-            <p>You haven't created any blogs yet.</p>
-            <a href="{{ route('user.blogs.create') }}" class="view-btn">
-                Create your first blog →
+            <p>No blog posts have been created yet.</p>
+            <a href="{{ route('blogs.create') }}" class="view-btn">
+                Create a blog →
             </a>
         </div>
 
@@ -285,12 +287,12 @@
 
     <div class="quick-actions">
 
-        <a href="{{ route('user.blogs.create') }}" class="action-btn create">
-            + Create New Blog
+        <a href="{{ route('blogs.create') }}" class="action-btn create">
+            + Create Blog
         </a>
 
-        <a href="{{ route('user.blogs.index') }}" class="action-btn manage">
-            📚 Manage My Blogs
+        <a href="{{ route('blogs.index') }}" class="action-btn manage">
+            📚 Manage Blogs
         </a>
 
     </div>

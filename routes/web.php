@@ -28,12 +28,12 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
 // Normal User Routes
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'user'])->group(function () {
 
     Route::get('/user-dashboard', [UserDashboardController::class, 'index'])
         ->name('user.dashboard');
 
-    // User Blog Management
+    // User can manage only their own blogs
     Route::resource('/my-blogs', UserBlogController::class)
         ->except(['show'])
         ->names('user.blogs');
@@ -49,7 +49,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [BlogController::class, 'dashboard'])
         ->name('dashboard');
 
+    // Admin can manage all blogs
     Route::resource('blogs', BlogController::class);
 
+    // Admin can manage categories
     Route::resource('categories', CategoryController::class);
 });

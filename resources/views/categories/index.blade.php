@@ -224,6 +224,12 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div class="success" style="background:#fee2e2;color:#991b1b;">
+                {{ session('error') }}
+            </div>
+        @endif
+
         @forelse($categories as $category)
 
             <div class="category-card">

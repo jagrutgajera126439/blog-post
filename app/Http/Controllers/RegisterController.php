@@ -23,7 +23,7 @@ class RegisterController extends Controller
         return view('auth.register');
     }
 
-    // Handle Registration
+    // Register New User
     public function register(Request $request)
     {
         $validated = $request->validate([
@@ -32,6 +32,7 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
+        // Always assign normal user role
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -39,11 +40,13 @@ class RegisterController extends Controller
             'role' => 'user',
         ]);
 
+        // Automatically login registered user
         Auth::login($user);
 
         $request->session()->regenerate();
 
-        return redirect()->route('user.dashboard')
-            ->with('success', 'Registration successful!');
+        return redirect()
+            ->route('user.dashboard')
+            ->with('success', 'Registration successful! Welcome to BlogSphere.');
     }
 }
