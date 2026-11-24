@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
-    // Dashboard
+    // Admin Dashboard
     public function dashboard()
     {
         $totalBlogs = Blog::count();
@@ -19,7 +19,7 @@ class BlogController extends Controller
 
         $totalCategories = Category::count();
 
-        $recentBlogs = Blog::with('category')
+        $recentBlogs = Blog::with(['category', 'user'])
             ->latest()
             ->take(5)
             ->get();
@@ -33,14 +33,14 @@ class BlogController extends Controller
         ));
     }
 
-    // Display all blogs with search, filters and pagination
+    // Display All Blogs with Search, Filters and Pagination
     public function index(Request $request)
     {
         $search = $request->input('search');
         $category = $request->input('category');
         $status = $request->input('status');
 
-        $blogs = Blog::with('category')
+        $blogs = Blog::with(['category', 'user'])
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('title', 'like', '%' . $search . '%')
@@ -68,7 +68,7 @@ class BlogController extends Controller
         ));
     }
 
-    // Show create blog form
+    // Show Create Blog Form
     public function create()
     {
         $categories = Category::orderBy('name')->get();
@@ -76,7 +76,7 @@ class BlogController extends Controller
         return view('blogs.create', compact('categories'));
     }
 
-    // Save new blog
+    // Save New Blog
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -94,7 +94,7 @@ class BlogController extends Controller
             ->with('success', 'Blog post created successfully!');
     }
 
-    // Show edit blog form
+    // Show Edit Blog Form
     public function edit(Blog $blog)
     {
         $categories = Category::orderBy('name')->get();
@@ -102,7 +102,7 @@ class BlogController extends Controller
         return view('blogs.edit', compact('blog', 'categories'));
     }
 
-    // Update blog
+    // Update Blog
     public function update(Request $request, Blog $blog)
     {
         $validated = $request->validate([
@@ -120,7 +120,7 @@ class BlogController extends Controller
             ->with('success', 'Blog post updated successfully!');
     }
 
-    // Delete blog
+    // Delete Blog
     public function destroy(Blog $blog)
     {
         $blog->delete();

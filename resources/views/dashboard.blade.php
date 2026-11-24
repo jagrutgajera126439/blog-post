@@ -1,464 +1,300 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BlogSphere | Dashboard</title>
+@extends('layouts.app')
 
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
+@section('title', 'My Dashboard')
+@section('header', 'My Dashboard')
+
+@section('content')
+
+<style>
+    .welcome {
+        margin-bottom: 28px;
+    }
+
+    .welcome h1 {
+        font-size: 30px;
+        color: #172554;
+        margin-bottom: 10px;
+    }
+
+    .welcome p {
+        color: #64748b;
+        font-size: 15px;
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px;
+        margin-bottom: 28px;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 24px;
+        border-radius: 14px;
+        border: 1px solid #e8edf5;
+        box-shadow: 0 4px 15px rgba(0,0,0,.04);
+    }
+
+    .stat-icon {
+        font-size: 28px;
+        margin-bottom: 12px;
+    }
+
+    .stat-number {
+        font-size: 30px;
+        font-weight: 800;
+        color: #172554;
+    }
+
+    .stat-name {
+        color: #64748b;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    .section {
+        background: white;
+        padding: 25px;
+        border-radius: 14px;
+        border: 1px solid #e8edf5;
+        box-shadow: 0 4px 15px rgba(0,0,0,.04);
+        margin-bottom: 24px;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .section-header h2 {
+        font-size: 19px;
+        color: #172554;
+    }
+
+    .view-btn {
+        color: #2563eb;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .blog-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        padding: 17px 0;
+        border-bottom: 1px solid #edf0f5;
+    }
+
+    .blog-row:last-child {
+        border-bottom: none;
+    }
+
+    .blog-title {
+        font-weight: 600;
+        color: #263247;
+        overflow-wrap: anywhere;
+    }
+
+    .blog-info {
+        color: #8993a4;
+        font-size: 13px;
+        margin-top: 6px;
+    }
+
+    .badge {
+        padding: 7px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .published {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .draft {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .empty {
+        text-align: center;
+        padding: 30px;
+        color: #64748b;
+    }
+
+    .quick-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .action-btn {
+        display: inline-block;
+        padding: 12px 17px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .create {
+        background: #2563eb;
+        color: white;
+    }
+
+    .manage {
+        background: #edf2f8;
+        color: #263247;
+    }
+
+    @media (max-width: 1000px) {
+        .stats {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
+    }
 
-        body {
-            margin: 0;
-            background: #f4f6fb;
-            color: #1f2937;
-        }
-
-        /* Navigation Bar */
-        .navbar {
-            background: #111827;
-            color: white;
-            padding: 18px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .logo {
-            font-size: 25px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        .logo span {
-            color: #60a5fa;
-        }
-
-        .nav {
-            display: flex;
-            align-items: center;
-            gap: 22px;
-            flex-wrap: wrap;
-        }
-
-        .nav a {
-            color: white;
-            text-decoration: none;
-            font-size: 15px;
-            transition: color 0.2s;
-        }
-
-        .nav a:hover {
-            color: #60a5fa;
-        }
-
-        .nav .nav-create {
-            background: #2563eb;
-            padding: 10px 15px;
-            border-radius: 8px;
-        }
-
-        .nav .nav-create:hover {
-            background: #1d4ed8;
-            color: white;
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1200px;
-            margin: 35px auto;
-            padding: 20px;
-        }
-
-        .welcome {
-            margin-bottom: 30px;
+    @media (max-width: 550px) {
+        .stats {
+            grid-template-columns: 1fr;
         }
 
         .welcome h1 {
-            margin: 0 0 10px;
-            font-size: 32px;
+            font-size: 24px;
         }
 
-        .welcome p {
-            color: #6b7280;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-
-        /* Statistics */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-            transition: transform 0.2s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-        }
-
-        .stat-icon {
-            font-size: 30px;
-        }
-
-        .stat-number {
-            font-size: 32px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        .stat-name {
-            color: #6b7280;
-            margin-top: 5px;
-        }
-
-        /* Sections */
         .section {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-            margin-bottom: 25px;
+            padding: 17px;
         }
 
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .section-header h2 {
-            margin: 0;
-            font-size: 22px;
-        }
-
-        .view-btn {
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .view-btn:hover {
-            text-decoration: underline;
-        }
-
-        /* Recent Blogs */
-        .blog-row {
-            padding: 18px 0;
-            border-bottom: 1px solid #e5e7eb;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .blog-row:last-child {
-            border-bottom: none;
-        }
-
-        .blog-title {
-            font-weight: bold;
-            font-size: 17px;
-            overflow-wrap: anywhere;
-        }
-
-        .blog-info {
-            color: #6b7280;
-            font-size: 13px;
-            margin-top: 7px;
-            line-height: 1.5;
-        }
-
-        .badge {
-            padding: 7px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        .published {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .draft {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .empty {
-            text-align: center;
-            padding: 30px 15px;
-            color: #6b7280;
-        }
-
-        /* Quick Actions */
         .quick-actions {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
+            flex-direction: column;
         }
 
         .action-btn {
-            display: inline-block;
-            padding: 13px 18px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background 0.2s;
+            text-align: center;
         }
 
-        .create {
-            background: #2563eb;
-            color: white;
+        .blog-row {
+            align-items: flex-start;
         }
+    }
+</style>
 
-        .create:hover {
-            background: #1d4ed8;
-        }
+<!-- WELCOME -->
+<div class="welcome">
+    <h1>👋 Welcome, {{ auth()->user()->name }}!</h1>
+    <p>Your personal BlogSphere dashboard. Manage your content easily.</p>
+</div>
 
-        .blogs {
-            background: #e5e7eb;
-            color: #111827;
-        }
+<!-- STATISTICS -->
+<div class="stats">
 
-        .blogs:hover {
-            background: #d1d5db;
-        }
+    <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-number">{{ $totalBlogs }}</div>
+        <div class="stat-name">My Blogs</div>
+    </div>
 
-        .categories {
-            background: #dbeafe;
-            color: #1d4ed8;
-        }
+    <div class="stat-card">
+        <div class="stat-icon">🟢</div>
+        <div class="stat-number">{{ $publishedBlogs }}</div>
+        <div class="stat-name">Published</div>
+    </div>
 
-        .categories:hover {
-            background: #bfdbfe;
-        }
+    <div class="stat-card">
+        <div class="stat-icon">📝</div>
+        <div class="stat-number">{{ $draftBlogs }}</div>
+        <div class="stat-name">Drafts</div>
+    </div>
 
-        /* Responsive Design */
-        @media (max-width: 900px) {
-            .stats {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
+</div>
 
-            .navbar {
-                padding: 18px 25px;
-            }
-        }
+<!-- RECENT BLOGS -->
+<section class="section">
 
-        @media (max-width: 600px) {
-            .navbar {
-                padding: 18px;
-                align-items: flex-start;
-            }
+    <div class="section-header">
+        <h2>🕒 My Recent Blog Posts</h2>
+        <a href="{{ route('user.blogs.index') }}" class="view-btn">
+            View All →
+        </a>
+    </div>
 
-            .nav {
-                gap: 15px;
-            }
+    @php
+        $recentBlogs = auth()->user()->blogs()->with('category')->latest()->take(5)->get();
+    @endphp
 
-            .nav a {
-                font-size: 14px;
-            }
+    @if($recentBlogs->count() > 0)
 
-            .container {
-                margin: 15px auto;
-                padding: 15px;
-            }
+        @foreach($recentBlogs as $blog)
 
-            .welcome h1 {
-                font-size: 26px;
-            }
+            <div class="blog-row">
 
-            .stats {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
+                <div>
+                    <div class="blog-title">{{ $blog->title }}</div>
 
-            .stat-card {
-                padding: 20px;
-            }
+                    <div class="blog-info">
+                        By {{ $blog->author }}
 
-            .section {
-                padding: 20px;
-            }
-
-            .blog-row {
-                align-items: flex-start;
-            }
-
-            .blog-info {
-                overflow-wrap: anywhere;
-            }
-
-            .quick-actions {
-                flex-direction: column;
-            }
-
-            .action-btn {
-                text-align: center;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="logo">
-            Blog<span>Sphere</span>
-        </div>
-
-        <div class="nav">
-            <a href="{{ route('dashboard') }}">Dashboard</a>
-            <a href="{{ route('blogs.index') }}">All Blogs</a>
-            <a href="{{ route('categories.index') }}">Categories</a>
-            <a href="{{ route('blogs.create') }}" class="nav-create">
-                + Create Blog
-            </a>
-        </div>
-    </nav>
-
-    <!-- Dashboard Content -->
-    <main class="container">
-
-        <div class="welcome">
-            <h1>👋 Welcome to BlogSphere</h1>
-            <p>
-                Smart Blog Management System — manage your content easily.
-            </p>
-        </div>
-
-        <!-- Statistics Cards -->
-        <div class="stats">
-
-            <div class="stat-card">
-                <div class="stat-icon">📚</div>
-                <div class="stat-number">{{ $totalBlogs }}</div>
-                <div class="stat-name">Total Blogs</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">🟢</div>
-                <div class="stat-number">{{ $publishedBlogs }}</div>
-                <div class="stat-name">Published</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">📝</div>
-                <div class="stat-number">{{ $draftBlogs }}</div>
-                <div class="stat-name">Drafts</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">🗂️</div>
-                <div class="stat-number">{{ $totalCategories }}</div>
-                <div class="stat-name">Categories</div>
-            </div>
-
-        </div>
-
-        <!-- Recent Blog Posts -->
-        <section class="section">
-
-            <div class="section-header">
-                <h2>🕒 Recent Blog Posts</h2>
-
-                <a href="{{ route('blogs.index') }}" class="view-btn">
-                    View All →
-                </a>
-            </div>
-
-            @if($recentBlogs->count() > 0)
-
-                @foreach($recentBlogs as $blog)
-
-                    <div class="blog-row">
-
-                        <div>
-                            <div class="blog-title">
-                                {{ $blog->title }}
-                            </div>
-
-                            <div class="blog-info">
-                                By {{ $blog->author }}
-
-                                @if($blog->category)
-                                    · {{ $blog->category->name }}
-                                @endif
-
-                                · {{ $blog->created_at->format('d M Y') }}
-                            </div>
-                        </div>
-
-                        @if($blog->status === 'published')
-                            <span class="badge published">Published</span>
-                        @else
-                            <span class="badge draft">Draft</span>
+                        @if($blog->category)
+                            · {{ $blog->category->name }}
                         @endif
 
+                        · {{ $blog->created_at->format('d M Y') }}
                     </div>
-
-                @endforeach
-
-            @else
-
-                <div class="empty">
-                    <p>No blog posts yet.</p>
-
-                    <a href="{{ route('blogs.create') }}" class="view-btn">
-                        Create your first blog →
-                    </a>
                 </div>
 
-            @endif
-
-        </section>
-
-        <!-- Quick Actions -->
-        <section class="section">
-
-            <div class="section-header">
-                <h2>⚡ Quick Actions</h2>
-            </div>
-
-            <div class="quick-actions">
-
-                <a href="{{ route('blogs.create') }}" class="action-btn create">
-                    + Create New Blog
-                </a>
-
-                <a href="{{ route('blogs.index') }}" class="action-btn blogs">
-                    📚 Manage Blogs
-                </a>
-
-                <a href="{{ route('categories.index') }}" class="action-btn categories">
-                    🗂️ Manage Categories
-                </a>
+                @if($blog->status === 'published')
+                    <span class="badge published">Published</span>
+                @else
+                    <span class="badge draft">Draft</span>
+                @endif
 
             </div>
 
-        </section>
+        @endforeach
 
-    </main>
+    @else
 
-</body>
-</html>
+        <div class="empty">
+            <p>You haven't created any blogs yet.</p>
+            <a href="{{ route('user.blogs.create') }}" class="view-btn">
+                Create your first blog →
+            </a>
+        </div>
+
+    @endif
+
+</section>
+
+<!-- QUICK ACTIONS -->
+<section class="section">
+
+    <div class="section-header">
+        <h2>⚡ Quick Actions</h2>
+    </div>
+
+    <div class="quick-actions">
+
+        <a href="{{ route('user.blogs.create') }}" class="action-btn create">
+            + Create New Blog
+        </a>
+
+        <a href="{{ route('user.blogs.index') }}" class="action-btn manage">
+            📚 Manage My Blogs
+        </a>
+
+    </div>
+
+</section>
+
+@endsection

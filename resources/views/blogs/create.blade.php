@@ -1,278 +1,165 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>BlogSphere | Create Blog</title>
+@extends('layouts.app')
 
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+@section('title', 'Create Blog')
 
-        body {
-            margin: 0;
-            background: #f4f6fb;
-            color: #1f2937;
-        }
+@section('header', 'Create New Blog')
 
-        .navbar {
-            background: #111827;
-            color: white;
-            padding: 18px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+@section('content')
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-        }
+<!-- PAGE HEADER -->
+<div class="page-header">
 
-        .logo span {
-            color: #60a5fa;
-        }
-
-        .nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 20px;
-        }
-
-        .container {
-            max-width: 850px;
-            margin: 40px auto;
-            padding: 20px;
-        }
-
-        .form-card {
-            background: white;
-            padding: 35px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
-        }
-
-        h1 {
-            margin-top: 0;
-            margin-bottom: 8px;
-        }
-
-        .subtitle {
-            color: #6b7280;
-            margin-bottom: 30px;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        input,
-        textarea,
-        select {
-            width: 100%;
-            padding: 13px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 15px;
-        }
-
-        textarea {
-            min-height: 180px;
-            resize: vertical;
-        }
-
-        input:focus,
-        textarea:focus,
-        select:focus {
-            outline: none;
-            border-color: #2563eb;
-        }
-
-        .error {
-            background: #fee2e2;
-            color: #991b1b;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .btn {
-            border: none;
-            padding: 13px 22px;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 15px;
-        }
-
-        .save {
-            background: #2563eb;
-            color: white;
-        }
-
-        .back {
-            background: #e5e7eb;
-            color: #111827;
-        }
-
-        .save:hover {
-            background: #1d4ed8;
-        }
-
-        .back:hover {
-            background: #d1d5db;
-        }
-
-        @media (max-width: 700px) {
-            .navbar {
-                padding: 15px 20px;
-            }
-
-            .nav a {
-                margin-left: 8px;
-                font-size: 14px;
-            }
-
-            .container {
-                margin: 20px auto;
-            }
-
-            .form-card {
-                padding: 22px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="navbar">
-
-        <div class="logo">
-            Blog<span>Sphere</span>
-        </div>
-
-        <div class="nav">
-            <a href="{{ route('dashboard') }}">Dashboard</a>
-            <a href="{{ route('blogs.index') }}">All Blogs</a>
-        </div>
-
+    <div>
+        <h1>Create New Blog ✍️</h1>
+        <p>Share your thoughts and stories with the BlogSphere community.</p>
     </div>
 
-    <div class="container">
+    <a href="{{ route('user.blogs.index') }}" class="btn btn-primary">
+        ← Back to My Blogs
+    </a>
 
-        <div class="form-card">
+</div>
 
-            <h1>✍️ Create New Blog</h1>
+<!-- BLOG FORM CARD -->
+<div class="content-card">
 
-            <p class="subtitle">
-                Share your thoughts with the BlogSphere community.
-            </p>
+    <div class="section-header">
+        <div>
+            <h2>Blog Details</h2>
+            <p>Fill in the information below to create your blog post.</p>
+        </div>
+    </div>
 
-            @if ($errors->any())
-                <div class="error">
-                    <strong>Please fix the following:</strong>
+    <!-- VALIDATION ERRORS -->
+    @if ($errors->any())
+        <div class="alert-danger">
+            <strong>Please fix the following errors:</strong>
 
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-            <form action="{{ route('blogs.store') }}" method="POST">
+    <!-- CREATE BLOG FORM -->
+    <form action="{{ route('user.blogs.store') }}" method="POST">
 
-                @csrf
+        @csrf
 
-                <label>Blog Title</label>
+        <!-- BLOG TITLE -->
+        <div class="form-group">
 
-                <input
-                    type="text"
-                    name="title"
-                    value="{{ old('title') }}"
-                    placeholder="Enter your blog title"
-                >
+            <label for="title">Blog Title</label>
 
-                <label>Author</label>
-
-                <input
-                    type="text"
-                    name="author"
-                    value="{{ old('author') }}"
-                    placeholder="Enter author name"
-                >
-
-                <label>Category</label>
-
-                <select name="category_id">
-
-                    <option value="">Select a category</option>
-
-                    @foreach ($categories as $category)
-
-                        <option
-                            value="{{ $category->id }}"
-                            {{ old('category_id') == $category->id ? 'selected' : '' }}
-                        >
-                            {{ $category->name }}
-                        </option>
-
-                    @endforeach
-
-                </select>
-
-                <label>Content</label>
-
-                <textarea
-                    name="content"
-                    placeholder="Write your blog content here..."
-                >{{ old('content') }}</textarea>
-
-                <label>Status</label>
-
-                <select name="status">
-
-                    <option value="published"
-                        {{ old('status', 'published') == 'published' ? 'selected' : '' }}>
-                        Published
-                    </option>
-
-                    <option value="draft"
-                        {{ old('status') == 'draft' ? 'selected' : '' }}>
-                        Draft
-                    </option>
-
-                </select>
-
-                <div class="buttons">
-
-                    <button type="submit" class="btn save">
-                        🚀 Save Blog
-                    </button>
-
-                    <a href="{{ route('blogs.index') }}" class="btn back">
-                        ← Back
-                    </a>
-
-                </div>
-
-            </form>
+            <input
+                type="text"
+                id="title"
+                name="title"
+                value="{{ old('title') }}"
+                placeholder="Enter your blog title"
+                required
+            >
 
         </div>
 
-    </div>
+        <!-- AUTHOR -->
+        <div class="form-group">
 
-</body>
-</html>
+            <label for="author">Author Name</label>
+
+            <input
+                type="text"
+                id="author"
+                name="author"
+                value="{{ old('author', auth()->user()->name) }}"
+                placeholder="Enter author name"
+                required
+            >
+
+        </div>
+
+        <!-- CATEGORY -->
+        <div class="form-group">
+
+            <label for="category_id">Category</label>
+
+            <select id="category_id" name="category_id" required>
+
+                <option value="">Select a category</option>
+
+                @foreach ($categories as $category)
+
+                    <option
+                        value="{{ $category->id }}"
+                        {{ old('category_id') == $category->id ? 'selected' : '' }}
+                    >
+                        {{ $category->name }}
+                    </option>
+
+                @endforeach
+
+            </select>
+
+        </div>
+
+        <!-- BLOG CONTENT -->
+        <div class="form-group">
+
+            <label for="content">Blog Content</label>
+
+            <textarea
+                id="content"
+                name="content"
+                rows="8"
+                placeholder="Write your blog content here..."
+                required
+            >{{ old('content') }}</textarea>
+
+        </div>
+
+        <!-- BLOG STATUS -->
+        <div class="form-group">
+
+            <label for="status">Blog Status</label>
+
+            <select id="status" name="status" required>
+
+                <option
+                    value="draft"
+                    {{ old('status', 'draft') == 'draft' ? 'selected' : '' }}
+                >
+                    Draft
+                </option>
+
+                <option
+                    value="published"
+                    {{ old('status') == 'published' ? 'selected' : '' }}
+                >
+                    Published
+                </option>
+
+            </select>
+
+        </div>
+
+        <!-- FORM BUTTONS -->
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+
+            <button type="submit" class="btn btn-primary">
+                🚀 Create Blog
+            </button>
+
+            <a href="{{ route('user.blogs.index') }}" class="btn btn-danger">
+                Cancel
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+@endsection

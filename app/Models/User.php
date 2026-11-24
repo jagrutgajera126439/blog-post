@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -32,6 +33,14 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    /**
+     * User Blogs Relationship
+     */
+    public function blogs()
+    {
+        return $this->hasMany(\App\Models\Blog::class);
+    }
 
     /**
      * Get the attributes that should be cast.
