@@ -37,8 +37,18 @@ class BlogController extends Controller
         ));
     }
 
-    // Display All Users' Blogs (Admin Only)
+    // All Blogs is read-only; editing is available on the separate Manage Blogs page.
     public function index(Request $request)
+    {
+        return $this->blogList($request, false);
+    }
+
+    public function manage(Request $request)
+    {
+        return $this->blogList($request, true);
+    }
+
+    private function blogList(Request $request, bool $canManage)
     {
         $search = $request->input('search');
         $category = $request->input('category');
@@ -68,7 +78,8 @@ class BlogController extends Controller
             'search',
             'categories',
             'category',
-            'status'
+            'status',
+            'canManage'
         ));
     }
 

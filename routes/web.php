@@ -59,6 +59,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [BlogController::class, 'dashboard'])
         ->name('dashboard');
 
+    // Read-only list and separate admin management page
+    Route::get('/manage-blogs', [BlogController::class, 'manage'])->name('blogs.manage');
+
     // Admin can manage all blogs
     Route::resource('blogs', BlogController::class);
 

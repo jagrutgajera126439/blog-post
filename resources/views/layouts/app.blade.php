@@ -748,7 +748,7 @@
                     </a>
 
                     <a href="{{ route('blogs.index') }}"
-                       class="{{ request()->routeIs('blogs.index', 'blogs.show', 'blogs.edit') ? 'active' : '' }}">
+                       class="{{ request()->routeIs('blogs.index', 'blogs.manage', 'blogs.show', 'blogs.edit') ? 'active' : '' }}">
                         <span class="bs-nav-icon">▤</span>
                         All Blogs
                     </a>

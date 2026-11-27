@@ -1,9 +1,9 @@
 
 @extends('layouts.app')
 
-@section('title', 'All Blogs')
+@section('title', $canManage ? 'Manage Blogs' : 'All Blogs')
 
-@section('header', 'All Blog Posts')
+@section('header', $canManage ? 'Manage Blogs' : 'All Blog Posts')
 
 @section('content')
 
@@ -271,13 +271,13 @@
 <div class="all-blogs-page">
 
     <div class="blogs-heading">
-        <h1>📝 All Blog Posts</h1>
-        <p>View and manage blog posts from all users.</p>
+        <h1>{{ $canManage ? '🛠️ Manage Blog Posts' : '📝 All Blog Posts' }}</h1>
+        <p>{{ $canManage ? 'Edit or delete blog posts from all users.' : 'View blog posts from all users.' }}</p>
     </div>
 
     <div class="blogs-toolbar">
 
-        <form action="{{ route('blogs.index') }}"
+        <form action="{{ route($canManage ? 'blogs.manage' : 'blogs.index') }}"
               method="GET"
               class="blogs-filter">
 
@@ -319,15 +319,17 @@
                 Apply Filters
             </button>
 
-            <a href="{{ route('blogs.index') }}" class="blogs-reset-btn">
+            <a href="{{ route($canManage ? 'blogs.manage' : 'blogs.index') }}" class="blogs-reset-btn">
                 Reset
             </a>
 
         </form>
 
+        @if($canManage)
         <a href="{{ route('blogs.create') }}" class="blogs-add-btn">
             + Add Blog
         </a>
+        @endif
 
     </div>
 
@@ -363,7 +365,8 @@
                 {{ \Illuminate\Support\Str::limit($blog->content, 220) }}
             </p>
 
-            <div class="blog-actions">
+            @if($canManage)
+                <div class="blog-actions">
 
                 <a href="{{ route('blogs.edit', $blog->id) }}"
                    class="blog-edit-btn">
@@ -383,7 +386,8 @@
 
                 </form>
 
-            </div>
+                </div>
+            @endif
 
         </div>
 

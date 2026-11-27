@@ -350,7 +350,7 @@
             + Create Blog
         </a>
 
-        <a href="{{ route('blogs.index') }}" class="action-btn manage">
+        <a href="{{ route('blogs.manage') }}" class="action-btn manage">
             📚 Manage Blogs
         </a>
 
