@@ -188,6 +188,69 @@
             align-items: flex-start;
         }
     }
+    .registered-user {
+        border-bottom: 1px solid #edf0f5;
+    }
+
+    .registered-user:last-child {
+        border-bottom: none;
+    }
+
+    .registered-user-summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 17px 0;
+        color: #263247;
+        font-weight: 600;
+        cursor: pointer;
+        list-style: none;
+    }
+
+    .registered-user-summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .registered-user-summary::before {
+        content: '＋';
+        color: #2563eb;
+        margin-right: 4px;
+    }
+
+    .registered-user[open] .registered-user-summary::before {
+        content: '−';
+    }
+
+    .registered-user-count {
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .registered-user-blogs {
+        padding: 0 0 12px 24px;
+    }
+
+    .registered-user-blog {
+        padding: 12px 14px;
+        margin: 0 0 10px;
+        background: #f8fafc;
+        border-radius: 8px;
+    }
+
+    .registered-user-blog-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        color: #263247;
+    }
+
+    .registered-user-empty {
+        color: #64748b;
+        font-size: 14px;
+    }
 </style>
 
 <!-- WELCOME -->
@@ -225,56 +288,52 @@
 
 </div>
 
-<!-- RECENT BLOGS -->
+
+
+
+<!-- REGISTERED USERS -->
 <section class="section">
 
     <div class="section-header">
-        <h2>🕒 Recent Blog Posts</h2>
-        <a href="{{ route('blogs.index') }}" class="view-btn">
-            View All →
-        </a>
+        <h2>👥 Registered Users</h2>
     </div>
 
-    @if($recentBlogs->count() > 0)
+    @forelse($registeredUsers as $registeredUser)
+        <details class="registered-user">
+            <summary class="registered-user-summary">
+                <span>{{ $registeredUser->name }}</span>
+                <span class="registered-user-count">
+                    {{ $registeredUser->blogs_count }} {{ \Illuminate\Support\Str::plural('blog', $registeredUser->blogs_count) }}
+                </span>
+            </summary>
 
-        @foreach($recentBlogs as $blog)
-
-            <div class="blog-row">
-
-                <div>
-                    <div class="blog-title">{{ $blog->title }}</div>
-
-                    <div class="blog-info">
-                        By {{ $blog->author }}
-
-                        @if($blog->category)
-                            · {{ $blog->category->name }}
-                        @endif
-
-                        · {{ $blog->created_at->format('d M Y') }}
-                    </div>
-                </div>
-
-                @if($blog->status === 'published')
-                    <span class="badge published">Published</span>
-                @else
-                    <span class="badge draft">Draft</span>
-                @endif
-
+            <div class="registered-user-blogs">
+                @forelse($registeredUser->blogs as $blog)
+                    <article class="registered-user-blog">
+                        <div class="registered-user-blog-heading">
+                            <strong>{{ $blog->title }}</strong>
+                            <span class="badge {{ $blog->status === 'published' ? 'published' : 'draft' }}">
+                                {{ ucfirst($blog->status) }}
+                            </span>
+                        </div>
+                        <div class="blog-info">
+                            By {{ $blog->author }}
+                            @if($blog->category)
+                                · {{ $blog->category->name }}
+                            @endif
+                            · {{ $blog->created_at->format('d M Y') }}
+                        </div>
+                    </article>
+                @empty
+                    <p class="registered-user-empty">This user has not created any blogs yet.</p>
+                @endforelse
             </div>
-
-        @endforeach
-
-    @else
-
+        </details>
+    @empty
         <div class="empty">
-            <p>No blog posts have been created yet.</p>
-            <a href="{{ route('blogs.create') }}" class="view-btn">
-                Create a blog →
-            </a>
+            <p>No registered users found.</p>
         </div>
-
-    @endif
+    @endforelse
 
 </section>
 

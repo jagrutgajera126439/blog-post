@@ -171,15 +171,83 @@
     }
 
     .blog-pagination {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 14px;
         margin-top: 25px;
+        padding: 14px 18px;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
-    .blog-pagination svg {
-        width: 18px;
-        height: 18px;
+    .pagination-summary {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .pagination-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .pagination-link,
+    .pagination-disabled,
+    .pagination-page {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 38px;
+        padding: 8px 13px;
+        border: 1px solid #dbe2ea;
+        border-radius: 7px;
+        font-size: 14px;
+        text-decoration: none;
+    }
+
+    .pagination-link {
+        background: #ffffff;
+        color: #1d4ed8;
+        font-weight: 600;
+    }
+
+    .pagination-link:hover {
+        background: #eff6ff;
+        border-color: #93c5fd;
+    }
+
+    .pagination-disabled {
+        background: #f8fafc;
+        color: #94a3b8;
+        cursor: not-allowed;
+    }
+
+    .pagination-page {
+        border-color: transparent;
+        color: #334155;
+        font-weight: 600;
+        white-space: nowrap;
     }
 
     @media (max-width: 600px) {
+        .blog-pagination {
+            justify-content: center;
+        }
+
+        .pagination-summary {
+            width: 100%;
+            text-align: center;
+        }
+
+        .pagination-controls {
+            justify-content: center;
+            flex-wrap: wrap;
+        }
         .blogs-filter {
             flex-direction: column;
             width: 100%;
@@ -328,9 +396,29 @@
 
     @endforelse
 
-    <div class="blog-pagination">
-        {{ $blogs->links() }}
-    </div>
+    @if($blogs->hasPages())
+        <nav class="blog-pagination" aria-label="Blog pagination">
+            <p class="pagination-summary">
+                Showing {{ $blogs->firstItem() }} to {{ $blogs->lastItem() }} of {{ $blogs->total() }} results
+            </p>
+
+            <div class="pagination-controls">
+                @if($blogs->onFirstPage())
+                    <span class="pagination-disabled" aria-disabled="true">← Previous</span>
+                @else
+                    <a class="pagination-link" href="{{ $blogs->previousPageUrl() }}" rel="prev">← Previous</a>
+                @endif
+
+                <span class="pagination-page">Page {{ $blogs->currentPage() }} of {{ $blogs->lastPage() }}</span>
+
+                @if($blogs->hasMorePages())
+                    <a class="pagination-link" href="{{ $blogs->nextPageUrl() }}" rel="next">Next →</a>
+                @else
+                    <span class="pagination-disabled" aria-disabled="true">Next →</span>
+                @endif
+            </div>
+        </nav>
+    @endif
 
 </div>
 

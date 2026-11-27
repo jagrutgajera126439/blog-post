@@ -114,6 +114,18 @@
             background: #1d4ed8;
         }
 
+        .forgot-password-link {
+            text-align: right;
+            margin: -7px 0 16px;
+            font-size: 13px;
+        }
+
+        .forgot-password-link a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
         .footer {
             text-align: center;
             color: #94a3b8;
@@ -141,6 +153,10 @@
 
         <h2>Account Login</h2>
         <p class="description">Sign in to continue to your BlogSphere dashboard.</p>
+
+        @if(session('status'))
+            <div style="background:#dcfce7;color:#166534;padding:12px;border-radius:8px;margin-bottom:15px;font-size:13px;">{{ session('status') }}</div>
+        @endif
 
         @if($errors->any())
             <div class="error" style="margin-bottom: 15px;">
@@ -173,6 +189,10 @@
                     placeholder="Enter your password"
                     required
                 >
+            </div>
+
+            <div class="forgot-password-link">
+                <a href="{{ route('password.request') }}">Forgot password?</a>
             </div>
 
             <button type="submit" class="login-btn">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
@@ -19,9 +20,12 @@ class BlogController extends Controller
 
         $totalCategories = Category::count();
 
-        $recentBlogs = Blog::with(['category', 'user'])
-            ->latest()
-            ->take(5)
+        $registeredUsers = User::where('role', 'user')
+            ->withCount('blogs')
+            ->with(['blogs' => function ($query) {
+                $query->with('category')->latest();
+            }])
+            ->orderBy('name')
             ->get();
 
         return view('dashboard', compact(
@@ -29,7 +33,7 @@ class BlogController extends Controller
             'publishedBlogs',
             'draftBlogs',
             'totalCategories',
-            'recentBlogs'
+            'registeredUsers'
         ));
     }
 

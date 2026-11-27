@@ -60,6 +60,10 @@ BlogSphere is a web-based Blog Post Management System developed using Laravel an
 
 9. Open `http://127.0.0.1:8000` in your browser.
 
+
+## Password Reset
+
+On the local XAMPP setup, `MAIL_MAILER=log` writes password reset emails to `storage/logs/laravel.log`. Use the latest reset link from that log after submitting the Forgot password form. To send real emails, configure SMTP settings in `.env`.
 ## Project Purpose
 
 This project demonstrates Laravel development concepts, database connectivity, CRUD operations, form validation, and dynamic web page development.
