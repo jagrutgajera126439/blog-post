@@ -11,7 +11,7 @@ class CategoryController extends Controller
     // Display all categories
     public function index()
     {
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::withCount('blogs')->orderBy('name')->get();
 
         return view('categories.index', compact('categories'));
     }

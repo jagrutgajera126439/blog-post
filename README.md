@@ -54,16 +54,22 @@ BlogSphere is a web-based Blog Post Management System developed using Laravel an
 
    `php artisan migrate`
 
-8. Start the Laravel development server:
+8. Create or promote an administrator account:
+
+   `php artisan app:create-admin`
+
+   Follow the prompts. If you already registered, enter that email and confirm promotion.
+
+9. Start the Laravel development server:
 
    `php artisan serve`
 
-9. Open `http://127.0.0.1:8000` in your browser.
+10. Open `http://127.0.0.1:8000` in your browser.
 
 
 ## Password Reset
 
-On the local XAMPP setup, `MAIL_MAILER=log` writes password reset emails to `storage/logs/laravel.log`. Use the latest reset link from that log after submitting the Forgot password form. To send real emails, configure SMTP settings in `.env`.
+On the local XAMPP setup, `MAIL_MAILER=log` writes password reset emails to `storage/logs/laravel.log`. Use the latest reset link from that log after submitting the Forgot password form. To send real emails, set `MAIL_MAILER=smtp`, `MAIL_SCHEME=tls`, `MAIL_HOST`, `MAIL_PORT=587`, `MAIL_USERNAME`, `MAIL_PASSWORD`, and a verified `MAIL_FROM_ADDRESS` in `.env`. Keep credentials private and do not commit `.env`.
 ## Project Purpose
 
 This project demonstrates Laravel development concepts, database connectivity, CRUD operations, form validation, and dynamic web page development.

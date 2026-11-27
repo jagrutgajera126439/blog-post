@@ -1,297 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BlogSphere | Categories</title>
+@extends('layouts.app')
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+@section('title', 'Categories')
+@section('header', 'Categories')
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6fb;
-            color: #172033;
-        }
-
-        .navbar {
-            background: #111827;
-            color: white;
-            padding: 20px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 26px;
-            font-weight: bold;
-        }
-
-        .logo span {
-            color: #3b82f6;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            margin-left: 25px;
-            font-size: 16px;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 45px auto;
-            padding: 0 20px;
-        }
-
-        .top-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 32px;
-        }
-
-        .subtitle {
-            color: #6b7280;
-            margin-top: 8px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            font-size: 15px;
-        }
-
-        .btn-primary {
-            background: #2563eb;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1d4ed8;
-        }
-
-        .btn-edit {
-            background: #f59e0b;
-            color: white;
-        }
-
-        .btn-delete {
-            background: #ef4444;
-            color: white;
-        }
-
-        .success {
-            background: #dcfce7;
-            color: #166534;
-            padding: 14px 18px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .category-card {
-            background: white;
-            border-radius: 14px;
-            padding: 22px;
-            margin-bottom: 15px;
-            box-shadow: 0 5px 18px rgba(0,0,0,0.06);
-
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .category-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .icon {
-            width: 48px;
-            height: 48px;
-            background: #eff6ff;
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-        }
-
-        .category-name {
-            font-size: 19px;
-            font-weight: bold;
-        }
-
-        .category-id {
-            color: #6b7280;
-            font-size: 13px;
-            margin-top: 4px;
-        }
-
-        .actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .empty {
-            background: white;
-            padding: 60px 20px;
-            text-align: center;
-            border-radius: 14px;
-            box-shadow: 0 5px 18px rgba(0,0,0,0.06);
-        }
-
-        @media (max-width: 700px) {
-            .navbar {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .nav-links a {
-                margin: 0 8px;
-            }
-
-            .top-section {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 20px;
-            }
-
-            .category-card {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 18px;
-            }
-
-            .actions {
-                width: 100%;
-            }
-
-            .actions .btn {
-                flex: 1;
-                text-align: center;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-    <nav class="navbar">
-        <div class="logo">
-            Blog<span>Sphere</span>
-        </div>
-
-        <div class="nav-links">
-            <a href="{{ route('dashboard') }}">Dashboard</a>
-            <a href="{{ route('blogs.index') }}">All Blogs</a>
-            <a href="{{ route('blogs.create') }}">Create Blog</a>
-        </div>
-    </nav>
-
-    <div class="container">
-
-        <div class="top-section">
-            <div>
-                <h1>🗂️ Categories</h1>
-                <div class="subtitle">
-                    Organize your blog posts by category.
-                </div>
-            </div>
-
-            <a href="{{ route('categories.create') }}" class="btn btn-primary">
-                + Add Category
-            </a>
-        </div>
-
-        @if(session('success'))
-            <div class="success">
-                ✅ {{ session('success') }}
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="success" style="background:#fee2e2;color:#991b1b;">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        @forelse($categories as $category)
-
-            <div class="category-card">
-
-                <div class="category-info">
-
-                    <div class="icon">
-                        🗂️
-                    </div>
-
-                    <div>
-                        <div class="category-name">
-                            {{ $category->name }}
-                        </div>
-
-                        <div class="category-id">
-                            Category ID: {{ $category->id }}
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="actions">
-
-                    <a
-                        href="{{ route('categories.edit', $category) }}"
-                        class="btn btn-edit">
-                        ✏️ Edit
-                    </a>
-
-                    <form
-                        action="{{ route('categories.destroy', $category) }}"
-                        method="POST"
-                        onsubmit="return confirm('Are you sure you want to delete this category?');">
-
-                        @csrf
-                        @method('DELETE')
-
-                        <button type="submit" class="btn btn-delete">
-                            🗑️ Delete
-                        </button>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-        @empty
-
-            <div class="empty">
-                <h2>📂 No Categories Found</h2>
-                <p>Create your first category to organize your blog posts.</p>
-
-                <a href="{{ route('categories.create') }}" class="btn btn-primary">
-                    + Create Category
-                </a>
-            </div>
-
-        @endforelse
-
-    </div>
-
-</body>
-</html>
+@section('content')
+<style>
+    .category-list { display:grid; gap:14px; }
+    .category-item { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:20px 22px; background:#fff; border:1px solid #e5e7eb; border-radius:14px; box-shadow:0 4px 14px rgba(15,23,42,.04); }
+    .category-info { display:flex; align-items:center; gap:14px; min-width:0; }
+    .category-icon { display:grid; place-items:center; width:46px; height:46px; flex:none; border-radius:12px; background:#eff6ff; font-size:22px; }
+    .category-name { font-size:17px; font-weight:700; overflow-wrap:anywhere; }
+    .category-meta { margin-top:4px; color:#64748b; font-size:13px; }
+    .category-actions { display:flex; align-items:center; gap:9px; flex:none; }
+    .category-actions form { margin:0; }
+    .category-actions .btn { display:inline-flex; align-items:center; justify-content:center; min-height:40px; padding:9px 14px; border:0; border-radius:8px; text-decoration:none; font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; }
+    .category-edit { background:#eff6ff; color:#1d4ed8; }
+    .category-delete { background:#fef2f2; color:#b91c1c; }
+    .category-empty { padding:42px 24px; text-align:center; }
+    .category-empty p { color:#64748b; margin:8px 0 20px; }
+    .category-form { max-width:720px; }
+    .category-form .content-card { padding:28px; }
+    .category-error { margin-bottom:16px; padding:13px 16px; border-radius:10px; background:#fef2f2; color:#991b1b; }
+    .category-error ul { margin:7px 0 0; padding-left:20px; }
+    .category-form-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; }
+    .category-secondary { display:inline-flex; align-items:center; justify-content:center; padding:11px 16px; border-radius:8px; background:#e2e8f0; color:#1e293b; text-decoration:none; font-weight:600; }
+    @media(max-width:600px) { .category-item { align-items:flex-start; flex-direction:column; } .category-actions { width:100%; } .category-actions .btn { flex:1; } .category-form .content-card { padding:20px; } }
+</style>
+<div class="page-header"><div><h1>🗂️ Categories</h1><p>Organize blog posts with clear, reusable categories.</p></div><a href="{{ route('categories.create') }}" class="btn btn-primary">+ Add Category</a></div>
+@if(session('error'))<div class="category-error">{{ session('error') }}</div>@endif
+@if($errors->any())<div class="category-error"><strong>Please fix the following:</strong><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
+<div class="category-list">
+    @forelse($categories as $category)
+        <article class="category-item"><div class="category-info"><div class="category-icon" aria-hidden="true">🗂️</div><div><div class="category-name">{{ $category->name }}</div><div class="category-meta">{{ $category->blogs_count }} {{ $category->blogs_count === 1 ? 'blog post' : 'blog posts' }}</div></div></div>
+            <div class="category-actions"><a href="{{ route('categories.edit', $category) }}" class="btn category-edit">Edit</a><form action="{{ route('categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Delete this category? Categories used by blog posts cannot be deleted.');">@csrf @method('DELETE')<button type="submit" class="btn category-delete">Delete</button></form></div>
+        </article>
+    @empty
+        <section class="content-card category-empty"><h2>No categories yet</h2><p>Create your first category to organize your blog posts.</p><a href="{{ route('categories.create') }}" class="btn btn-primary">Create Category</a></section>
+    @endforelse
+</div>
+@endsection
