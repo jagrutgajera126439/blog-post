@@ -73,6 +73,18 @@ class BlogManagementTest extends TestCase
         $this->assertDatabaseMissing('blogs', ['title' => 'Invalid category post']);
     }
 
+    public function test_categories_page_shows_blog_count_without_server_error(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $blog = $this->createBlog($admin, 'Category count post');
+
+        $this->actingAs($admin)
+            ->get(route('categories.index'))
+            ->assertOk()
+            ->assertSee('Testing')
+            ->assertSee('1 blog post');
+    }
+
     public function test_registration_always_creates_a_regular_user(): void
     {
         $this->post(route('register.submit'), [
