@@ -9,7 +9,7 @@
     .category-page-header { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:28px; }
     .category-page-header h1 { margin:0 0 8px; color:#172554; font-size:30px; font-weight:800; }
     .category-page-header p { margin:0; color:#64748b; font-size:15px; line-height:1.6; }
-    .category-add-button { display:inline-flex !important; align-items:center; justify-content:center; flex:none; min-height:46px; padding:12px 18px !important; border:0; border-radius:9px; background:#2563eb !important; color:#fff !important; text-decoration:none !important; font:600 14px/1.2 inherit; white-space:nowrap; box-shadow:0 3px 8px rgba(37,99,235,.2); transition:background .2s, transform .2s; }
+    .category-add-button { display:inline-flex !important; align-items:center; justify-content:center; flex:none; min-height:46px; padding:12px 18px !important; border:0; border-radius:9px; background:#2563eb !important; color:#fff !important; text-decoration:none !important; font-family:inherit; font-size:14px; font-weight:600; line-height:1.2; white-space:nowrap; box-shadow:0 3px 8px rgba(37,99,235,.2); transition:background .2s, transform .2s; }
     .category-add-button:hover { background:#1d4ed8 !important; color:#fff !important; transform:translateY(-1px); }
     .category-item { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:20px 22px; background:#fff; border:1px solid #e5e7eb; border-radius:14px; box-shadow:0 4px 14px rgba(15,23,42,.04); }
     .category-info { display:flex; align-items:center; gap:14px; min-width:0; }
