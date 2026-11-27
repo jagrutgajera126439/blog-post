@@ -55,10 +55,16 @@ class BlogController extends Controller
         $status = $request->input('status');
 
         $blogs = Blog::with(['category', 'user'])
-            ->when($search, function ($query, $search) {
-                $query->where(function ($q) use ($search) {
+            ->when($search, function ($query, $search) use ($canManage) {
+                $query->where(function ($q) use ($search, $canManage) {
                     $q->where('title', 'like', '%' . $search . '%')
                       ->orWhere('author', 'like', '%' . $search . '%');
+
+                    if ($canManage) {
+                        $q->orWhereHas('user', function ($userQuery) use ($search) {
+                            $userQuery->where('name', 'like', '%' . $search . '%');
+                        });
+                    }
                 });
             })
             ->when($category, function ($query, $category) {

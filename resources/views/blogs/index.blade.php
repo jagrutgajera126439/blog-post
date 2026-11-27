@@ -284,7 +284,7 @@
             <input
                 type="text"
                 name="search"
-                placeholder="Search by title or author..."
+                placeholder="{{ $canManage ? 'Search by title, author, or user...' : 'Search by title or author...' }}"
                 value="{{ $search ?? '' }}"
             >
 
