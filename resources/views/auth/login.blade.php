@@ -91,6 +91,34 @@
             box-shadow: 0 0 0 3px #dbeafe;
         }
 
+
+        .password-input-wrapper {
+            position: relative;
+        }
+
+        .password-input-wrapper input {
+            padding-right: 68px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            padding: 5px 7px;
+            border: 0;
+            background: transparent;
+            color: #2563eb;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .password-toggle:focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
         .error {
             color: #dc2626;
             font-size: 12px;
@@ -182,13 +210,24 @@
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Enter your password"
-                    required
-                >
+                <div class="password-input-wrapper">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        id="togglePassword"
+                        aria-label="Show password"
+                        aria-controls="password"
+                        aria-pressed="false"
+                    >Show</button>
+                </div>
             </div>
 
             <div class="forgot-password-link">
@@ -207,5 +246,18 @@
 
     </div>
 
+
+    <script>
+        const passwordInput = document.getElementById('password');
+        const passwordToggle = document.getElementById('togglePassword');
+
+        passwordToggle.addEventListener('click', () => {
+            const shouldShow = passwordInput.type === 'password';
+            passwordInput.type = shouldShow ? 'text' : 'password';
+            passwordToggle.textContent = shouldShow ? 'Hide' : 'Show';
+            passwordToggle.setAttribute('aria-label', shouldShow ? 'Hide password' : 'Show password');
+            passwordToggle.setAttribute('aria-pressed', String(shouldShow));
+        });
+    </script>
 </body>
 </html>
